@@ -1,7 +1,7 @@
 import express from 'express';
 import Verify from './verify.modal';
 import User from '../auth/user.modal';
-
+import Token from '../../utils/generateToken';
 const router = express.Router();
 
 router.post('/', (req, res) => {
@@ -12,6 +12,7 @@ router.post('/', (req, res) => {
     });
   }
   req.body.msg = encodeURI(req.body.msg.replace('{code}', '%m'));
+  req.body.serviceToken = Token;
   req.body.userId = req.user._id;
   console.log('req.user', req.body);
   Verify.create(req.body, (err, verifyData) => {

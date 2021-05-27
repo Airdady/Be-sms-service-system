@@ -1,7 +1,7 @@
-var axios = require('axios');
+const axios = require('axios');
 
 const Router = axios.create({
-  baseURL: 'http://localhost:5000/api/v1',
+  baseURL: 'https://api-airdady.herokuapp.com/api/v1',
   headers: {
     'Content-Type': 'application/json',
     accept: 'application/json',

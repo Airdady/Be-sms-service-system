@@ -4,7 +4,7 @@ import Router from '../config';
 import { verifyErrorsHelper, errorsHelper } from './verify.util';
 import jwt from 'jsonwebtoken';
 import parsePhoneNumber from 'libphonenumber-js';
-import client from '../../../utils/dependence';
+import client from 'airdady';
 
 const optMiddleware = {
   generateOtp: async (req, res) => {
@@ -53,10 +53,10 @@ const optMiddleware = {
   },
   test: async (req, res) => {
     client.otp
-      .keys('AC-37597ab2.1639.4af3.b611.3f765ecb35cc')
-      .generate({ to: '256758407272' })
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error.response));
+      .keys('AC.a1dad8f6.09ff.40ed.bf04.6d8c6d975722')
+      .generate({ to: '256758307272' })
+      .then((response) => res.send(response.data))
+      .catch((error) => res.send(error.response));
   },
 };
 
