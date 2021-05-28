@@ -9,7 +9,6 @@ import client from '../../../utils/dependence';
 const optMiddleware = {
   send: async (req, res) => {
     const phoneNumber = parsePhoneNumber('758307272', 'UG');
-    console.log(phoneNumber.isValid());
     const { senderName, msg, expiry } = req.service;
     const sender_id = senderName;
     const mobile = req.params.msisdn;

@@ -2,6 +2,7 @@ import AuthUtil from './auth.util';
 import User from './user.modal';
 import Response from '../../utils/response';
 import Verify from '../verify/verify.modal';
+import Wallet from '../wallet/wallet.model';
 
 const authMiddleware = {
   verifyToken: (req, res, next) => {
@@ -24,6 +25,15 @@ const authMiddleware = {
       if (err) return Response(res, 422, 'something went wrong');
       if (!service) return Response(res, 404, 'Invalid service keys');
       req.service = service;
+      return next();
+    });
+  },
+
+  checkServiceCredit: async (req, res, next) => {
+    Wallet.findOne({ userId: req.service.userId }, (err, wallet) => {
+      if (err) return Response(res, 422, 'error occurred while getting wallet balance info');
+      if (!wallet) return Response(res, 404, 'error occurred while getting wallet balance info');
+      if (wallet.balance > 10) return Response(res, 401, 'low credit to complete the operation');
       return next();
     });
   },

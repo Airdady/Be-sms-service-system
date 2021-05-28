@@ -2,6 +2,7 @@ import User from './user.modal';
 import AuthUtil from './auth.util';
 import Response from '../../utils/response';
 import bcrypt from 'bcrypt';
+import Wallet from '../wallet/wallet.model';
 
 const userController = {
   login: (req, res) => {
@@ -26,10 +27,20 @@ const userController = {
           if (err) {
             return res.status(400).send({ message: 'Create user failed', err });
           }
-          return res.status(200).send({
-            status: 200,
-            message: 'registration successful',
-            data: user,
+          Wallet.create({ userId: user._id }, (error, wallet) => {
+            if (wallet) {
+              return res.status(200).send({
+                status: 200,
+                message: 'registration successful',
+                data: user,
+              });
+            } else {
+              return Response(
+                res,
+                422,
+                'eerror occured while creating the account'
+              );
+            }
           });
         });
       });
