@@ -1,7 +1,10 @@
 import express from 'express';
 import Sms from './sms.modal';
+import Visit from '../stats/stats.utils'
 
 const router = express.Router();
+
+router.use(Visit)
 
 router.post('/', (req, res) => {
   req.body.userId = req.user._id;
@@ -68,7 +71,8 @@ router
   });
 
 router.get('/user/:id', (req, res) => {
-  Sms.find({}, (err, profiles) => {
+  const {id} = req.params
+  Sms.findOne({_id: id}, (err, profiles) => {
     if (err) {
       res.status(400).send({ message: 'Create user failed', err });
     }
