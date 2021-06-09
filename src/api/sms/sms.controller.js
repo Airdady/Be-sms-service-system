@@ -1,4 +1,4 @@
-import Response from '../../../utils/response';
+import Response from '../../utils/response';
 import { SmsRouter } from '../config';
 
 const SMSController = {
