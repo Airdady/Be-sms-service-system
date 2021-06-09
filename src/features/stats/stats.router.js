@@ -1,12 +1,13 @@
 import express from 'express';
 import Logs from '../logs/logs.model';
+import _ from 'lodash';
+import moment from 'moment';
 
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    console.log(req.user._id);
 	Logs.find({ userId: req.user._id }, (error, data) => {
-		return res.send({ data });
+		res.send({ data:_.groupBy(data, (b)=> moment(b.createdAt).format("YYYY-MM-DD")) });
 	});
 });
 
