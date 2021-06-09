@@ -1,9 +1,10 @@
 import express from "express";
 import Auth from '../../../features/auth/auth.middleware'
-import OtpController from './verify.controller'
+import SMSController from './sms.controller'
 
 const router = express.Router();
-router.post("/send", OtpController.resendOtp);
-router.post("/send_batch", OtpController.test);
+
+router.post("/send", SMSController.send);
+router.post("/send_batch", SMSController.batchSend);
 
 export default router;

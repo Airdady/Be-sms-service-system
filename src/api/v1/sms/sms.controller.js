@@ -1,42 +1,28 @@
 import Response from '../../../utils/response';
-import Otp from '../../../features/verify/verify.modal';
-import Router from '../config';
-import { verifyErrorsHelper, errorsHelper } from './verify.util';
-import jwt from 'jsonwebtoken';
-import parsePhoneNumber from 'libphonenumber-js';
-import client from '../../../utils/dependence';
+import { SmsRouter } from '../config';
 
-const optMiddleware = {
+const SMSController = {
   send: async (req, res) => {
-    const phoneNumber = parsePhoneNumber('758307272', 'UG');
-    const { senderName, msg, expiry } = req.service;
-    const sender_id = senderName;
-    const mobile = req.params.msisdn;
-    const message = decodeURI(msg).replace('%m', '{code}');
-    const reqData = { mobile, sender_id, message, expiry };
+    const { senderId, dlr, dlrUrl } = req.profile;
+    const { from, to, content } = req.body;
+    const reqData = { from: from || senderId, to, content, dlr, dlrUrl };
     try {
-      const { data } = await Router.post(`verifier/send`, reqData);
-      return res.status(200).send(data);
+      const { data } = await SmsRouter.post(`/send`, reqData);
+      return Response(res, 200, '', data);
     } catch (error) {
-      return res.status(200).send(error);
+      return res.status(422).send(error);
     }
   },
 
   batchSend: async (req, res) => {
-    const {
-      params: { otp_id, otp_code },
-    } = req;
-    try {
-      const response = await Router.post(`/verifier/verify`, {
-        otp_id,
-        otp_code,
-      });
-      return res.status(200).send(response.data);
+    try {       
+      const resp = await SmsRouter.post(`/send_batch`, req.body);
+      return Response(res, 200, '', resp.data);
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
       return res.status(422).send(error.response.data);
     }
   },
 };
 
-export default optMiddleware;
+export default SMSController;

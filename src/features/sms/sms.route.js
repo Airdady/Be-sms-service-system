@@ -1,17 +1,18 @@
 import express from 'express';
 import Sms from './sms.modal';
+import Token from '../../utils/generateToken';
 
 const router = express.Router();
 
 router.post('/', (req, res) => {
   req.body.userId = req.user._id;
-  Sms.create(req.body, (err, verifyData) => {
+  Sms.create(req.body, (err, data) => {
     if (err) {
       return res.status(400).send({ message: 'profile creation failed', err });
     }
     return res.status(200).send({
       status: 200,
-      data: verifyData,
+      data,
     });
   });
 });

@@ -38,7 +38,7 @@ const userController = {
               return Response(
                 res,
                 422,
-                'eerror occured while creating the account'
+                'error occurred while creating the account'
               );
             }
           });

@@ -10,20 +10,15 @@ const SmsSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    msg: {
-      type: String,
-    },
-    senderName: {
+    senderId: {
       type: String,
       required: true,
     },
     dlr: {
-      type: Number,
-      required: true,
-    },
-    serviceToken: {
       type: String,
-      required: true,
+    },
+    dlrUrl: {
+      type: String,
     },
     active: {
       type: Boolean,

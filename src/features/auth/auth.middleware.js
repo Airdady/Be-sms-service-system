@@ -3,6 +3,9 @@ import User from './user.modal';
 import Response from '../../utils/response';
 import Verify from '../verify/verify.modal';
 import Wallet from '../wallet/wallet.model';
+import Token from '../../utils/generateToken';
+import SMSController from '../../api/v1/sms/sms.controller';
+import Sms from '../sms/sms.modal';
 
 const authMiddleware = {
   verifyToken: (req, res, next) => {
@@ -20,6 +23,34 @@ const authMiddleware = {
     });
   },
 
+  findUserByToken: (req, res, next) => {
+    Sms.findById(req.query.keys, (error, data) => {
+      if (!data || error) {
+        return Response(res, 401, 'Authentication failed');
+      }
+      User.findById(data.userId, (err, user) => {
+        if (!user || err) {
+          return Response(res, 401, 'Authentication failed');
+        }
+        req.user = user;
+        req.profile = data;
+        return next();
+      });
+    });
+  },
+
+  verifyUser: async (req, res, next) => {
+    const { email, password } = Token.decode(req.query.keys);
+    User.findOne({ email }, (err, user) => {
+      if (!user || err) return Response(res, 401, 'authentication failed');
+      if (AuthUtil.comparePassword(password, user.password)) {
+        req.user = user;
+        return next();
+      }
+      return Response(res, 401, 'authentication failed');
+    });
+  },
+
   getServiceTokenDetails: async (req, res, next) => {
     Verify.findOne({ serviceToken: req.query.keys }, (err, service) => {
       if (err) return Response(res, 422, 'something went wrong');
@@ -30,10 +61,21 @@ const authMiddleware = {
   },
 
   checkServiceCredit: async (req, res, next) => {
-    Wallet.findOne({ userId: req.service.userId }, (err, wallet) => {
-      if (err) return Response(res, 422, 'error occurred while getting wallet balance info');
-      if (!wallet) return Response(res, 404, 'error occurred while getting wallet balance info');
-      if (wallet.balance > 10) return Response(res, 401, 'low credit to complete the operation');
+    Wallet.findOne({ userId: req.user._id }, (err, wallet) => {
+      if (err)
+        return Response(
+          res,
+          422,
+          'error occurred while getting wallet balance info'
+        );
+      if (!wallet)
+        return Response(
+          res,
+          404,
+          'error occurred while getting wallet balance info'
+        );
+      if (wallet.balance < 0.005)
+        return Response(res, 401, 'Low credit to complete the operation');
       return next();
     });
   },

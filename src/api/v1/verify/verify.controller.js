@@ -53,7 +53,7 @@ const optMiddleware = {
   },
   test: async (req, res) => {
     client.otp
-      .keys('AC.a1dad8f6.09ff.40ed.bf04.6d8c6d975722')
+      .keys('AC.a1dad8f6.09ff40edbf04.6d8c6d975722')
       .generate({ to: '256758307272' })
       .then((response) => res.send(response.data))
       .catch((error) => res.send(error.response));
