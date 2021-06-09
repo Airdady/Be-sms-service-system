@@ -7,6 +7,8 @@ import Auth from './features/auth/auth.middleware';
 import VerifyApi from './api/verify/verify.routes';
 import SMSApi from './api/sms/sms.route';
 import Wallet from './features/wallet/wallet.route';
+import Stats from './features/stats/stats.router';
+import Logs from './features/logs/logs.router';
 
 const router = express.Router();
 router.use('/auth', UserRoute);
@@ -16,5 +18,7 @@ router.use('/payments', checkout);
 router.use('/otp', VerifyApi);
 router.use('/sms', Auth.findUserByToken, Auth.checkServiceCredit, SMSApi);
 router.use('/wallet', Wallet);
+router.use('/stats',Auth.verifyToken, Stats);
+router.use('/api_logs',Auth.verifyToken, Logs);
 
 export default router;
