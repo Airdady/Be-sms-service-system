@@ -1,29 +1,27 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+const PaymentSchema = new mongoose.Schema(
   {
-    username: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-    email: {
-      type: String,
-      unique: true,
-      required: true,
-    },
-    company: {
+    amount: {
       type: String,
       required: true,
     },
-    password: {
+    userId: {
       type: String,
       required: true,
     },
+    payerId: {
+      type: String,
+      required: true,
+    },
+    orderId: {
+      type: String,
+      required: true,
+    }
   },
   { timestamps: true }
 );
 
-const User = mongoose.model("User", userSchema);
+const Payment = mongoose.model("Payment", PaymentSchema);
 
-export default User;
+export default Payment;
