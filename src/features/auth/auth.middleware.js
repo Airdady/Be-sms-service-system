@@ -1,11 +1,10 @@
 import AuthUtil from './auth.util';
 import User from './user.modal';
 import Response from '../../utils/response';
-import Verify from '../verify/verify.modal';
+import Verify from '../verify_profile/verify.modal';
 import Wallet from '../wallet/wallet.model';
 import Token from '../../utils/generateToken';
-import SMSController from '../../api/v1/sms/sms.controller';
-import Sms from '../sms/sms.modal';
+import Sms from '../sms_profile/sms.modal';
 
 const authMiddleware = {
   verifyToken: (req, res, next) => {

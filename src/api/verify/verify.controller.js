@@ -1,7 +1,6 @@
-import Response from '../../../utils/response';
-import Otp from '../../../features/verify/verify.modal';
+import Response from '../../utils/response';
+import Otp from '../../features/verify_profile/verify.modal';
 import Router from '../config';
-import { verifyErrorsHelper, errorsHelper } from './verify.util';
 import jwt from 'jsonwebtoken';
 import parsePhoneNumber from 'libphonenumber-js';
 import client from 'airdady';

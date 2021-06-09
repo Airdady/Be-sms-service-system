@@ -1,26 +1,20 @@
 import express, { response } from 'express';
 import UserRoute from './features/auth/user.route';
-import VerifyRoute from './features/verify/verify.route';
-import Sms from './features/sms/sms.route';
+import VerifyRoute from './features/verify_profile/verify.route';
+import SmsProfile from './features/sms_profile/sms.route';
 import checkout from './features/checkout/checkout.route';
 import Auth from './features/auth/auth.middleware';
-import Verify from './api/v1/verify/verify.routes';
-import SMSApi from './api/v1/sms/sms.route';
+import VerifyApi from './api/verify/verify.routes';
+import SMSApi from './api/sms/sms.route';
 import Wallet from './features/wallet/wallet.route';
 
 const router = express.Router();
 router.use('/auth', UserRoute);
-router.use('/verify', Auth.verifyToken, VerifyRoute);
-router.use('/sms', Auth.verifyToken, Sms);
+router.use('/verify_profile', Auth.verifyToken, VerifyRoute);
+router.use('/sms_profile', Auth.verifyToken, SmsProfile);
 router.use('/payments', checkout);
-router.use('/payments', checkout);
-router.use('/api/v1/otp', Verify);
-router.use(
-  '/api/v1/sms',
-  Auth.findUserByToken,
-  Auth.checkServiceCredit,
-  SMSApi
-);
-router.use('/api/v1/wallet', Wallet);
+router.use('/otp', VerifyApi);
+router.use('/sms', Auth.findUserByToken, Auth.checkServiceCredit, SMSApi);
+router.use('/wallet', Wallet);
 
 export default router;

@@ -5,47 +5,43 @@ import bcrypt from 'bcrypt';
 import Wallet from '../wallet/wallet.model';
 
 const userController = {
-  login: (req, res) => {
-    const { email, password } = req.body;
-    User.findOne({ email }, (err, user) => {
-      if (!user) return Response(res, 401, 'user does not exist');
-      if (AuthUtil.comparePassword(password, user.password)) {
-        user.password = undefined;
-        const token = AuthUtil.createToken({
-          _id: user._id,
-          email: user.email,
-        });
-        return Response(res, 200, 'login successful', { user, token });
-      }
-      return Response(res, 401, 'Invalid login details');
-    });
-  },
-  register: (req, res) => {
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(req.body.password, salt, (err, password) => {
-        User.create({ ...req.body, password }, (err, user) => {
-          if (err) {
-            return res.status(400).send({ message: 'Create user failed', err });
-          }
-          Wallet.create({ userId: user._id }, (error, wallet) => {
-            if (wallet) {
-              return res.status(200).send({
-                status: 200,
-                message: 'registration successful',
-                data: user,
-              });
-            } else {
-              return Response(
-                res,
-                422,
-                'error occurred while creating the account'
-              );
-            }
-          });
-        });
-      });
-    });
-  },
+	login: (req, res) => {
+		const { email, password } = req.body;
+		User.findOne({ email }, (err, user) => {
+			if (!user) return Response(res, 401, 'user does not exist');
+			if (AuthUtil.comparePassword(password, user.password)) {
+				user.password = undefined;
+				const token = AuthUtil.createToken({
+					_id: user._id,
+					email: user.email,
+				});
+				return Response(res, 200, 'login successful', { user, token });
+			}
+			return Response(res, 401, 'Invalid login details');
+		});
+	},
+	register: (req, res) => {
+		bcrypt.genSalt(10, (err, salt) => {
+			bcrypt.hash(req.body.password, salt, (err, password) => {
+				User.create({ ...req.body, password }, (err, user) => {
+					if (err) {
+						return res.status(400).send({ message: 'Create user failed', err });
+					}
+					Wallet.create({ userId: user._id }, (error, wallet) => {
+						if (wallet) {
+							return res.status(200).send({
+								status: 200,
+								message: 'registration successful',
+								data: user,
+							});
+						} else {
+							return Response(res, 422, 'error occurred while creating the account');
+						}
+					});
+				});
+			});
+		});
+	},
 };
 
 export default userController;
