@@ -38,6 +38,22 @@ const authMiddleware = {
 		});
 	},
 
+  findUserByVerifyToken: (req, res, next) => {
+		Verify.findById(req.query.keys, (error, data) => {
+			if (!data || error) {
+				return Response(res, 401, 'Authentication failed');
+			}
+			User.findById(data.userId, (err, user) => {
+				if (!user || err) {
+					return Response(res, 401, 'Authentication failed');
+				}
+				req.user = user;
+				req.profile = data;
+				return next();
+			});
+		});
+	},
+
 	verifyUser: async (req, res, next) => {
 		const { email, password } = Token.decode(req.query.keys);
 		User.findOne({ email }, (err, user) => {
@@ -61,8 +77,7 @@ const authMiddleware = {
 
 	checkServiceCredit: async (req, res, next) => {
 		Wallet.findOne({ userId: req.user._id }, (err, wallet) => {
-			if (err) return Response(res, 422, 'error occurred while getting wallet balance info');
-			if (!wallet) return Response(res, 404, 'error occurred while getting wallet balance info');
+			if (!wallet || err) return Response(res, 422, 'error occurred while getting wallet balance info');
 			if (wallet.balance > 0.005) return Response(res, 401, 'Low credit to complete the operation');
 			return next();
 		});

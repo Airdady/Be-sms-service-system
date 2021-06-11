@@ -11,14 +11,15 @@ import Stats from './features/stats/stats.router';
 import Logs from './features/logs/logs.router';
 
 const router = express.Router();
+
 router.use('/auth', UserRoute);
 router.use('/verify_profile', Auth.verifyToken, VerifyRoute);
 router.use('/sms_profile', Auth.verifyToken, SmsProfile);
 router.use('/payments', checkout);
-router.use('/otp', VerifyApi);
-router.use('/sms', Auth.findUserByToken, Auth.checkServiceCredit, SMSApi);
 router.use('/wallet', Wallet);
 router.use('/stats',Auth.verifyToken, Stats);
 router.use('/api_logs',Auth.verifyToken, Logs);
+router.use('/otp',Auth.findUserByVerifyToken, Auth.checkServiceCredit, VerifyApi);
+router.use('/sms', Auth.findUserByToken, Auth.checkServiceCredit, SMSApi);
 
 export default router;
