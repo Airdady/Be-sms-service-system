@@ -5,16 +5,13 @@ import Token from '../../utils/generateToken';
 const router = express.Router();
 
 router.post('/', (req, res) => {
-  if (!req.body.msg || !req.body.msg.match('{code}')) {
+  if (!req.body.message || !req.body.message.match('{code}')) {
     return res.status(400).send({
       status: 400,
       message: 'make sure {code} exists in your message template',
     });
   }
-  req.body.msg = encodeURI(req.body.msg.replace('{code}', '%m'));
-  req.body.serviceToken = Token;
   req.body.userId = req.user._id;
-  console.log('req.user', req.body);
   Verify.create(req.body, (err, verifyData) => {
     if (err) {
       return res.status(400).send({ message: 'profile creation failed', err });
