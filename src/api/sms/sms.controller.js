@@ -18,8 +18,8 @@ const SMSController = {
 
 	batchSend: async (req, res) => {
 		try {
-			const resp = await SmsRouter.post(`/send_batch`, req.body);
-			return Response(res, 200, '', resp.data);
+			const resp = await SmsRouter.post(`/sendbatch`, req.body);
+			return Response(res, 200, 'Messages successfully sent', resp.data);
 		} catch (error) {
 			console.log(error.response);
 			return res.status(422).send(error.response.data);
