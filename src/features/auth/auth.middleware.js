@@ -5,6 +5,7 @@ import Verify from '../verify_profile/verify.modal';
 import Wallet from '../wallet/wallet.model';
 import Token from '../../utils/generateToken';
 import Sms from '../sms_profile/sms.modal';
+import companyEmailValidator from './update.blacklist.mails';
 
 const authMiddleware = {
 	verifyToken: (req, res, next) => {
@@ -38,7 +39,7 @@ const authMiddleware = {
 		});
 	},
 
-  findUserByVerifyToken: (req, res, next) => {
+	findUserByVerifyToken: (req, res, next) => {
 		Verify.findById(req.query.keys, (error, data) => {
 			if (!data || error) {
 				return Response(res, 401, 'Authentication failed');
@@ -81,6 +82,13 @@ const authMiddleware = {
 			if (wallet.balance > 0.005) return Response(res, 401, 'Low credit to complete the operation');
 			return next();
 		});
+	},
+	validateEmail: (req, res, next) => {
+		const { email } = req.body;
+		if (companyEmailValidator.match(email.split('@')[1])) {
+			return Response(res, 400, 'we only accept company emails');
+		}
+		return next();
 	},
 };
 
