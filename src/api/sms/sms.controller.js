@@ -9,7 +9,7 @@ const SMSController = {
 		const reqData = { from: from || senderId, to, content, dlr, dlrUrl };
 		try {
 			const { data } = await SmsRouter.post(`/send`, reqData);
-			await CreateLog('sms', userId, to, from, data.data.split(' ')[1].replace(/[/"]/,''));
+			await CreateLog('sms', userId, to, from, data.data.split(' ')[1].replace(/[/"]/, ''));
 			return Response(res, 200, 'SMS successfully sent', data);
 		} catch (error) {
 			return res.status(422).send(error);
