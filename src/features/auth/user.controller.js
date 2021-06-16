@@ -26,7 +26,8 @@ const userController = {
 			bcrypt.hash(req.body.password, salt, (err, password) => {
 				User.create({ ...req.body, password }, (err, user) => {
 					if (err) {
-						return res.status(400).send({ message: 'Create user failed', err });
+						if (err.keyPattern) return Resp(res, 409,`${Object.keys(err.keyPattern)[0]} is taken`);
+						return res.status(400).send({ message: 'Create user failed'});
 					}
 					Wallet.create({ userId: user._id }, (error, wallet) => {
 						if (wallet) {
@@ -61,7 +62,6 @@ const userController = {
 	setNewPassword: async (req, res) => {
 		User.updateOne({ email: req.user.email }, { password: AuthUtil.hashPassword(req.body.password) }, (err, user) => {
 			if (err) return Resp(res, 422, 'password reset failed');
-			// if (!user) return Resp(res, 400, 'no user associated with email found');
 			return Resp(res, 200, 'new password set successfully');
 		});
 	},
