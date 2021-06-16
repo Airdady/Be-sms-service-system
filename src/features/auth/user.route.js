@@ -32,5 +32,8 @@ router.get('/users/:id', (req, res) => {
 router.post('/', UserController.register);
 router.post('/login', UserController.login);
 router.get('/google',passport.authenticate('google',{ scope:['profile']}))
+router.get('/google/redirect', passport.authenticate('google'), (req, res)=>{
+  res.redirect('/inApp/')
+})
 
 export default router;
