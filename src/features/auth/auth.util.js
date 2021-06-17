@@ -9,15 +9,10 @@ const authHelper = {
   hashPassword(password) {
     return bcrypt.hashSync(password, 10, (err, hash) => hash);
   },
-
-  hashData(password) {
-    return bcrypt.hashSync(password, 10, (err, hash) => hash);
-  },
-
+  
   getToken(req) {
     const getToken = req.headers.authorization;
-    const token =
-      getToken && getToken.match("Bearer") ? getToken.split(" ")[1] : getToken;
+    const token = getToken && getToken.match("Bearer") ? getToken.split(" ")[1] : getToken;
     return req.params.token || token;
   },
 

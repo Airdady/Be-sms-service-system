@@ -2,6 +2,7 @@ import express from 'express';
 import User from './user.modal';
 import UserController from './user.controller';
 import passport from 'passport';
+import AuthMiddleware from './auth.middleware';
 
 const router = express.Router();
 
@@ -29,7 +30,7 @@ router.get('/users/:id', (req, res) => {
   });
 });
 
-router.post('/', UserController.register);
+router.post('/', AuthMiddleware.validateEmail, UserController.register);
 router.post('/login', UserController.login);
 //google routes
 router.get('/google',passport.authenticate('google',{ scope:['profile']}))
@@ -48,5 +49,8 @@ router.get('/github/callback',
     res.redirect('/inApp/');
   });
 
+router.get('/users/confirm/:token', AuthMiddleware.verifyToken, UserController.confirmUser);
+router.post('/password_reset', UserController.resetPassword);
+router.post('/password_reset/:token', AuthMiddleware.verifyToken, UserController.setNewPassword);
 
 export default router;
