@@ -38,12 +38,11 @@ router.get('/google/redirect', passport.authenticate('google'), (req, res)=>{
 })
 //github routes
 
-router.get('/github', passport.authenticate("github", { scope: ["user:email"] }), /// Note the scope here
- 
-)
+router.get('/github', passport.authenticate("github", { scope: ["user:email"] }), )
 router.get('/github/callback', 
   passport.authenticate('github', { failureRedirect: '/login' }),
   (req, res) => {
+
     // Successful authentication, redirect home.
     res.redirect('/inApp/');
   });

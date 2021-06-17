@@ -4,6 +4,7 @@ const githubOauthSchema = new mongoose.Schema({
     githubId:String
 });
 
-const githubOauthModel = mongoose.model('Github',githubOauthSchema)
+const githubOauthModel = mongoose.model('Github', githubOauthSchema)
+
 
 export default githubOauthModel;
