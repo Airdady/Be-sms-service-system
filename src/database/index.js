@@ -4,7 +4,9 @@ dotenv.config();
 
 const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false,
+      useCreateIndex: true,
 };
 
 const database = mongoose
