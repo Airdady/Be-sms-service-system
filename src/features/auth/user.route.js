@@ -31,9 +31,22 @@ router.get('/users/:id', (req, res) => {
 
 router.post('/', UserController.register);
 router.post('/login', UserController.login);
+//google routes
 router.get('/google',passport.authenticate('google',{ scope:['profile']}))
 router.get('/google/redirect', passport.authenticate('google'), (req, res)=>{
   res.redirect('/inApp/')
 })
+//github routes
+
+router.get('/github', passport.authenticate("github", { scope: ["user:email"] }), /// Note the scope here
+ 
+)
+router.get('/github/callback', 
+  passport.authenticate('github', { failureRedirect: '/login' }),
+  (req, res) => {
+    // Successful authentication, redirect home.
+    res.redirect('/inApp/');
+  });
+
 
 export default router;
