@@ -9,6 +9,7 @@ import SMSApi from './api/sms/sms.route';
 import Wallet from './features/wallet/wallet.route';
 import Stats from './features/stats/stats.router';
 import Logs from './features/logs/logs.router';
+import Address from './features/address/address.route';
 
 const router = express.Router();
 
@@ -21,5 +22,6 @@ router.use('/stats',Auth.verifyToken, Stats);
 router.use('/api_logs',Auth.verifyToken, Logs);
 router.use('/otp',Auth.findUserByVerifyToken, Auth.checkServiceCredit, VerifyApi);
 router.use('/sms', Auth.findUserByToken, Auth.checkServiceCredit, SMSApi);
+router.use('/address', Auth.verifyToken, Address);
 
 export default router;

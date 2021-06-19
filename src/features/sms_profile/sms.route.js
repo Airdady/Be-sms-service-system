@@ -20,7 +20,7 @@ router.post('/', (req, res) => {
 router.get('/', (req, res) => {
   Sms.find({ userId: req.user._id }, (err, smsData) => {
     if (err) {
-      return res.status(400).send({ message: 'profile creation failed', err });
+      return res.status(400).send({ message: 'profile view failed', err });
     }
     return res.status(200).send({
       status: 200,
