@@ -7,11 +7,10 @@ const optMiddleware = {
 	generateOtp: async (req, res) => {
 		const { senderId, message, expiry, otplen } = req.profile;
 		const reqData = { to: req.params.to, senderId, content: message, expiry, otplen };
-		OtpSystem.generateOtp(reqData, async (error, genResponse) => {
-			console.log(genResponse);
+		OtpSystem.generateOtp(reqData, async (error, genRes) => {
 			if (error) return Resp(res, 400, error);
-			return CreateLog('verify', req.user._id, req.params.to, senderId, genResponse.data.split(' ')[1].replace('"', ''))
-				.then(() => Resp(res, 200, genResponse.message))
+			return CreateLog('verify', req.user._id, req.params.to, senderId, genRes.data.msgId)
+				.then(() => Resp(res, 200, genRes.message, genRes.data))
 				.catch((err) => {
 					console.log(err);
 					return Resp(res, 400, err)

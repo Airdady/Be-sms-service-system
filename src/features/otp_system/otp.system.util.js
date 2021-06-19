@@ -16,11 +16,12 @@ const generateOTP = (length) => {
 const OtpSystemUtil = {
 	generateOtp: (data, cb) => {
 		const code = generateOTP(data.otplen);
+		const expiry = data.expiry;
 		return OtpSystem.updateOne(
 			{ to: data.to },
 			{
 				code,
-				expiry: moment().add(data.expiry, 'minutes').toISOString(),
+				expiry: moment().add(expiry, 'minutes').toISOString(),
 				to: data.to,
 			},
 			{ upsert: true },
@@ -31,12 +32,21 @@ const OtpSystemUtil = {
 					content: data.content.replace('{code}', code),
 				})
 					.then((data) => {
-						return cb('', { message: 'verification code send successfully', data:data.data.data })
+						const resData = data.config && JSON.parse(data.config.data);
+						return cb('', {
+							message: 'verification code send successfully',
+							data: {
+								senderId: resData.from,
+								to: resData.to,
+								expiry: parseInt(moment().add(expiry, 'minutes').format('X')),
+								msgId: data.data.data.split(' ')[1].replace('"', ''),
+							},
+						});
 					})
 					.catch((error) => {
-						console.log(error)
+						console.log(error);
 						return cb('verification code send failed');
-					})
+					}),
 		);
 	},
 	resendOtp: (data, to, cb) => {
