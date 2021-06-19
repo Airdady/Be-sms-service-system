@@ -20,7 +20,6 @@ const OtpSchema = new mongoose.Schema(
 		},
 		msgId: {
 			type: String,
-			required: true,
 		},
 	},
 	{ timestamps: true },

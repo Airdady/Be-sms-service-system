@@ -1,13 +1,21 @@
 import Resp from '../../utils/response';
 import OtpSystem from '../../features/otp_system/otp.system.util';
 import client from 'airdady';
+import CreateLog from '../../features/logs/logs.util';
 
 const optMiddleware = {
 	generateOtp: async (req, res) => {
 		const { senderId, message, expiry, otplen } = req.profile;
 		const reqData = { to: req.params.to, senderId, content: message, expiry, otplen };
-		OtpSystem.generateOtp(reqData, (error, message) => {
-			return error ? Resp(res, 400, error) : Resp(res, 200, message);
+		OtpSystem.generateOtp(reqData, async (error, genResponse) => {
+			console.log(genResponse);
+			if (error) return Resp(res, 400, error);
+			return CreateLog('verify', req.user._id, req.params.to, senderId, genResponse.data.split(' ')[1].replace('"', ''))
+				.then(() => Resp(res, 200, genResponse.message))
+				.catch((err) => {
+					console.log(err);
+					return Resp(res, 400, err)
+				});
 		});
 	},
 
