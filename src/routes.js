@@ -10,6 +10,7 @@ import Wallet from './features/wallet/wallet.route';
 import Stats from './features/stats/stats.router';
 import Logs from './features/logs/logs.router';
 import Address from './features/address/address.route';
+const stripe = require('stripe')('YOUR_SECRET_KEY_HERE')
 
 const router = express.Router();
 
@@ -17,7 +18,7 @@ router.use('/auth', UserRoute);
 router.use('/verify_profile', Auth.verifyToken, VerifyRoute);
 router.use('/sms_profile', Auth.verifyToken, SmsProfile);
 router.use('/payments', checkout);
-router.use('/wallet', Wallet);
+router.use('/wallet',Auth.verifyToken, Wallet);
 router.use('/stats',Auth.verifyToken, Stats);
 router.use('/api_logs',Auth.verifyToken, Logs);
 router.use('/otp',Auth.findUserByVerifyToken, Auth.checkServiceCredit, VerifyApi);
