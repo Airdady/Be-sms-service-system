@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import passport from 'passport';
 import googleStrategy from 'passport-google-oauth20';
-import googleOauthModel from '../models/googleOauth'
+import googleOauthModel from '../models/googleOauth';
 
 dotenv.config();
 
@@ -22,12 +22,20 @@ passport.use(new googleStrategy({ callbackURL: '/auth/google/redirect',
                              (accessToken, refreshToken, profile, done)=> {
 
                                 console.log(profile)
+                               
+                                
                                 googleOauthModel.findOne({googleId :profile.id}).then(user=>{
                                     if(user) {
+                                        // const token = AuthUtil.createToken({
+                                        //     _id: profile.id,
+                                        //     email:profile._json.email,
+                                        // })
+                                        // console.log(token)
                                         done(null, user)
+                                        
                                     }else{
-                                        new googleOauthModel({userName:profile.name.givenName}).save().then((user) =>{
-                                           done(null, user) 
+                                        new googleOauthModel({userName:profile.name.givenName, email:profile._json.email, googleId:profile.id}).save().then((user) =>{
+                                            done(null, user) 
                                         })
                                     }
                                 })

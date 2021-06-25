@@ -1,7 +1,18 @@
 import mongoose  from "mongoose";
 const googleOauthSchema = new mongoose.Schema({
-    userName:String,
-    googleId:String
+   
+    userName: {
+        type: String,
+       
+      },
+      googleId: {
+        type: String,
+       
+      },
+    email: {
+        type: String,
+      
+      },
 });
 
 const googleOauthModel = mongoose.model('Oauth',googleOauthSchema)
