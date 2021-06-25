@@ -1,83 +1,12 @@
 import express from 'express';
-import Sms from './sms.modal';
-import Token from '../../utils/generateToken';
+import SMS from './sms.controller';
 
 const router = express.Router();
 
-router.post('/', (req, res) => {
-  req.body.userId = req.user._id;
-  Sms.create(req.body, (err, data) => {
-    if (err) {
-      return res.status(400).send({ message: 'profile creation failed', err });
-    }
-    return res.status(200).send({
-      status: 200,
-      data,
-    });
-  });
-});
+router.route('/').get(SMS.getAll).post(SMS.create);
 
-router.get('/', (req, res) => {
-  Sms.find({ userId: req.user._id }, (err, smsData) => {
-    if (err) {
-      return res.status(400).send({ message: 'profile view failed', err });
-    }
-    return res.status(200).send({
-      status: 200,
-      data: smsData,
-    });
-  });
-});
+router.route('/:id').delete(SMS.delete).patch(SMS.update);
 
-router
-  .route('/:id')
-  .delete((req, res) => {
-    Sms.remove(
-      { userId: req.user._id, _id: req.params.id },
-      (err, { deletedCount }) => {
-        if (!deletedCount) {
-          return res.status(404).send({
-            status: 404,
-            message: `profile doesn't exist`,
-          });
-        }
-        return res.status(200).send({
-          status: 200,
-          data: 'profile deleted successfully',
-        });
-      }
-    );
-  })
-  .patch((req, res) => {
-    Sms.updateOne(
-      { userId: req.user._id, _id: req.params.id },
-      { ...req.body },
-      (err, { nModified }) => {
-        console.log(nModified);
-        if (!nModified) {
-          return res.status(404).send({
-            status: 404,
-            message: `profile doesn't exist`,
-          });
-        }
-        return res.status(200).send({
-          status: 200,
-          data: 'profile updated successfully',
-        });
-      }
-    );
-  });
-
-router.get('/user/:id', (req, res) => {
-  Sms.find({}, (err, profiles) => {
-    if (err) {
-      res.status(400).send({ message: 'Create user failed', err });
-    }
-    res.status(200).send({
-      status: 200,
-      data: profiles,
-    });
-  });
-});
+router.get('/user/:id', SMS.getById);
 
 export default router;
