@@ -16,13 +16,17 @@ const SmsSchema = new mongoose.Schema(
     },
     dlr: {
       type: String,
+      enum: ['yes', 'no']
     },
     dlrUrl: {
       type: String,
     },
+    dlrLevel: {
+      type: Number,
+    },
     active: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   { timestamps: true }

@@ -61,20 +61,6 @@ const verifyProfile = {
 			});
 		});
 	},
-	updateOne: (req, res) => {
-		Verify.updateOne({ userId: req.user._id, _id: req.params.id }, { ...req.body }, (err, { nModified }) => {
-			if (!nModified) {
-				return res.status(404).send({
-					status: 404,
-					message: `profile doesn't exist`,
-				});
-			}
-			return res.status(200).send({
-				status: 200,
-				data: 'profile updated successfully',
-			});
-		});
-	},
 };
 
 export default verifyProfile;
