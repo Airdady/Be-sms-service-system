@@ -2,6 +2,8 @@ import Resp from '../../utils/response';
 import OtpSystem from '../../features/otp_system/otp.system.util';
 import client from 'airdady';
 import CreateLog from '../../features/logs/logs.util';
+const phoneUtil = require('google-libphonenumber').PhoneNumberUtil.getInstance();
+import parsePhoneNumber from 'libphonenumber-js'
 
 const optMiddleware = {
 	generateOtp: async (req, res) => {

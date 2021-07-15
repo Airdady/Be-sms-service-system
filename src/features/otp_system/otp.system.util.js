@@ -2,20 +2,11 @@ import OtpSystem from './otp.system.model';
 import { SmsRouter } from '../../api/config';
 import moment from 'moment';
 
-const generateOTP = (length) => {
-	let digits = '0123456789';
-	const otpLength = length;
-	let otp = '';
-	for (let i = 1; i <= otpLength; i++) {
-		const index = Math.floor(Math.random() * digits.length);
-		otp = otp + digits[index];
-	}
-	return otp;
-};
-
 const OtpSystemUtil = {
 	generateOtp: (data, cb) => {
-		const code = generateOTP(data.otplen);
+		const code = Math.random()
+			.toString()
+			.slice(2, data.otplen + 2);
 		const expiry = data.expiry;
 		return OtpSystem.updateOne(
 			{ to: data.to },

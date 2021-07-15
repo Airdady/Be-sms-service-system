@@ -29,6 +29,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "freemail": "^1.7.0",
+    "google-libphonenumber": "^3.2.21",
     "googleapis": "^76.0.0",
     "jsonwebtoken": "^8.5.1",
     "libphonenumber-js": "^1.9.19",
