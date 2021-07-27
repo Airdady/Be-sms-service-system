@@ -79,7 +79,7 @@ const authMiddleware = {
 	checkServiceCredit: async (req, res, next) => {
 		Wallet.findOne({ userId: req.user._id }, (err, wallet) => {
 			if (!wallet || err) return Response(res, 422, 'error occurred while getting wallet balance info');
-			if (wallet.balance > 0.005) return Response(res, 401, 'Low credit to complete the operation');
+			if (wallet.balance < 0.005) return Response(res, 401, 'Low credit to complete the operation');
 			return next();
 		});
 	},
