@@ -2,10 +2,12 @@
   "name": "be-sms-service-system",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
-    "start": "node -r esm index.js",
-    "dev": "nodemon -r esm index.js",
+    "start": "npm run clean && npm run build && node ./dist/index.js",
+    "dev": "nodemon -r esm ./src/index.js",
+    "clean": "rimraf dist",
+    "build": "babel ./src --out-dir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -37,12 +39,19 @@
     "moment": "^2.29.1",
     "mongoose": "^5.11.18",
     "nodemailer": "^6.6.1",
+    "npm-run-all": "^4.1.5",
+    "regenerator-runtime": "^0.13.9",
+    "rimraf": "^3.0.2",
     "stripe": "^8.156.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
     "eslint": "^7.28.0",
-    "nodemon": "^2.0.7",
+    "nodemon": "^2.0.15",
     "prettier": "^2.3.1"
   }
 }

@@ -1,8 +1,9 @@
+import "regenerator-runtime/runtime";
 import express from 'express';
-import Routes from './src/routes';
-import { methodError, serverError } from './src/middleware';
+import Routes from './routes';
+import { methodError, serverError } from './middleware';
 import cors from 'cors';
-import './src/database';
+import './database';
 
 const app = express();
 
