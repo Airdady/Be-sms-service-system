@@ -17,27 +17,37 @@ const OtpSystemUtil = {
 			},
 			{ upsert: true },
 			() =>
-				SmsRouter.post(`/send`, {
-					from: data.senderId,
-					to: data.to,
-					content: data.content.replace('{code}', code),
-				})
-					.then((data) => {
-						const resData = data.config && JSON.parse(data.config.data);
-						return cb('', {
-							message: 'verification code send successfully',
-							data: {
-								senderId: resData.from,
-								to: resData.to,
-								expiry: parseInt(moment().add(expiry, 'minutes').format('X')),
-								msgId: data.data.data.split(' ')[1].replace('"', ''),
-							},
-						});
-					})
-					.catch((error) => {
-						console.log(error);
-						return cb('verification code send failed');
-					}),
+				cb('', {
+					message: 'verification code send successfully',
+					data: {
+						senderId: 'resData.from',
+						to: 'resData.to',
+						code,
+						expiry: parseInt(moment().add(expiry, 'minutes').format('X')),
+						msgId: 'test',
+					},
+				}),
+			// SmsRouter.post(`/send`, {
+			// 	from: data.senderId,
+			// 	to: data.to,
+			// 	content: data.content.replace('{code}', code),
+			// })
+			// 	.then((data) => {
+			// 		const resData = data.config && JSON.parse(data.config.data);
+			// 		return cb('', {
+			// 			message: 'verification code send successfully',
+			// 			data: {
+			// 				senderId: resData.from,
+			// 				to: resData.to,
+			// 				expiry: parseInt(moment().add(expiry, 'minutes').format('X')),
+			// 				msgId: data.data.data.split(' ')[1].replace('"', ''),
+			// 			},
+			// 		});
+			// 	})
+			// 	.catch((error) => {
+			// 		console.log(error);
+			// 		return cb('verification code send failed');
+			// 	}),
 		);
 	},
 	resendOtp: (data, to, cb) => {

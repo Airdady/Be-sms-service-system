@@ -5,6 +5,8 @@ import { methodError, serverError } from './middleware';
 import cors from 'cors';
 import './database';
 
+console.log('ooiioiio');
+
 const app = express();
 
 app.use(express.json());

@@ -8,6 +8,7 @@ import parsePhoneNumber from 'libphonenumber-js'
 const optMiddleware = {
 	generateOtp: async (req, res) => {
 		const { senderId, message, expiry, otplen } = req.profile;
+		console.log(senderId, message, expiry, otplen);
 		const reqData = { to: req.params.to, senderId, content: message, expiry, otplen };
 		OtpSystem.generateOtp(reqData, async (error, genRes) => {
 			if (error) return Resp(res, 400, error);

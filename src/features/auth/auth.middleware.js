@@ -44,10 +44,12 @@ const authMiddleware = {
 			if (!data || error) {
 				return Response(res, 401, 'Authentication failed');
 			}
+			
 			User.findById(data.userId, (err, user) => {
 				if (!user || err) {
 					return Response(res, 401, 'Authentication failed');
 				}
+				console.log(err, user);
 				req.user = user;
 				req.profile = data;
 				return next();
@@ -79,7 +81,7 @@ const authMiddleware = {
 	checkServiceCredit: async (req, res, next) => {
 		Wallet.findOne({ userId: req.user._id }, (err, wallet) => {
 			if (!wallet || err) return Response(res, 422, 'error occurred while getting wallet balance info');
-			if (wallet.balance < 0.005) return Response(res, 401, 'Low credit to complete the operation');
+			// if (wallet.balance < 0.005) return Response(res, 401, 'Low credit to complete the operation');
 			return next();
 		});
 	},
